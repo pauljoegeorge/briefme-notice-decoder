@@ -1,0 +1,13 @@
+services:
+  postgres:
+    image: pgvector/pgvector:pg17
+    environment:
+      POSTGRES_DB: notice_decoder
+      POSTGRES_USER: notice
+      POSTGRES_PASSWORD: local_notice_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - notice_pgdata:/var/lib/postgresql/data
+volumes:
+  notice_pgdata:

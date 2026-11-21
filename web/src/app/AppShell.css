@@ -1,0 +1,31 @@
+.shell {
+	max-width: 1220px;
+	margin: 0 auto;
+	padding: 32px 28px 55px;
+}
+.masthead {
+	display: flex;
+	align-items: center;
+	gap: 15px;
+}
+.mark {
+	display: grid;
+	place-items: center;
+	width: 52px;
+	height: 52px;
+	border-radius: 14px;
+	background: var(--brand-solid);
+	color: var(--on-brand);
+	font-size: 27px;
+}
+.eyebrow {
+	font-size: 11px;
+	letter-spacing: 0.16em;
+	color: var(--subtle);
+	font-weight: 700;
+}
+@media (max-width: 760px) {
+	.shell {
+		padding: 22px 16px;
+	}
+}
