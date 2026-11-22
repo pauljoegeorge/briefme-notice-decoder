@@ -24,6 +24,7 @@ api/
     image_uploads.py       shared image safety validation
     ocr/
       client.py            OCR contract and implementation
+      preprocess.py        EXIF orientation, page rectification, and text deskew
       schemas.py           OCR output shape
     notices/
       router.py            notice analysis endpoint

@@ -1,8 +1,15 @@
 # Notice Decoder — local prototype
 
-This prototype covers the first three milestones: local app setup, upload-to-result flow, and OCR evidence on the original image. It uses local RapidOCR with Japanese recognition and rule-based triage. RAG, Jev, Claude, and LangGraph are the next phase.
+A local web app for getting a preliminary English reading of a Japanese notice while keeping the original photo in view.
 
-Project decisions and next steps: [implementation plan](docs/plan.md) · [architecture](docs/architecture.md) · [FastAPI conventions](docs/fastapi-conventions.md) · [engineering standards](docs/engineering-standards.md) · [design system](docs/design-system.md) · [product boundaries](docs/product-boundaries.md).
+## Current capabilities
+
+- Upload or take a JPEG, PNG, or WebP photo up to 15 MB.
+- Read Japanese text locally with RapidOCR. The OCR pipeline applies camera orientation, attempts perspective correction or text-angle deskew, and keeps the original reading when correction does not improve its score.
+- Show a preliminary English explanation of what the notice appears to be, whether action may be needed, and its key details.
+- Extract dates, amounts, and phone numbers with OCR confidence and a link to the source line highlighted on the original photo.
+- Flag notices that match money, legal, immigration, medical, or threatening patterns. High-risk matches receive a referral instead of an interpretation.
+- Keep processing local. Uploaded images are removed after analysis; the app does not save notices or create reminders.
 
 ## Requirements
 
@@ -25,16 +32,21 @@ npm install
 npm run dev
 ```
 
-Open the URL printed by Vite. The browser sends images to the local API. Uploaded files are deleted after OCR; the prototype does not save notices or create reminders. The Japanese OCR model downloads on the first use, then runs locally.
+Open the URL printed by Vite. The browser sends images to the local API on port 8000.
 
 Run `make check` from the project root before finishing a code change. Rules for future agents are in `AGENTS.md`, with API and web-specific rules in their directories.
 
+## Project docs
+
+[Implementation plan](docs/plan.md) · [Architecture](docs/architecture.md) · [FastAPI conventions](docs/fastapi-conventions.md) · [Engineering standards](docs/engineering-standards.md) · [Design system](docs/design-system.md) · [Product boundaries](docs/product-boundaries.md)
+
 ## PostgreSQL
 
-The planned application database is PostgreSQL with pgvector. It is not required for these first three milestones because nothing is saved before confirmation. `compose.yaml` provides the local database for the next phase.
+The planned application database is PostgreSQL with pgvector. It is not required for the current reading flow because nothing is saved. `compose.yaml` provides the local database for future features.
 
 ## Current limits
 
 - OCR quality depends on image quality. Vertical text and handwriting need dedicated evaluation.
 - The summary and risk route are simple rules, not model judgments. They should not be treated as authoritative.
 - Only JPEG, PNG, and WebP images up to 15 MB are accepted.
+- RAG, Jev, Claude, and LangGraph are not implemented yet.
