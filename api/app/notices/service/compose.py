@@ -5,7 +5,11 @@ from ..schemas import AnalysisResult, ExtractedField, Risk
 
 
 def compose_result(
-    lines: list[OcrLine], fields: list[ExtractedField], risk: Risk, kind: str
+    lines: list[OcrLine],
+    fields: list[ExtractedField],
+    risk: Risk,
+    kind: str,
+    evidence_rejected: bool = False,
 ) -> AnalysisResult:
     if not lines:
         return AnalysisResult(
@@ -34,6 +38,8 @@ def compose_result(
 
     if sum(line.confidence for line in lines) / len(lines) < 0.55:
         warning += " OCR confidence is low. Verify each detail on the original or retake the photo."
+    if evidence_rejected:
+        warning += " Some details lacked matching OCR evidence and were omitted."
     details = ", ".join(f"{field.label.lower()}: {field.value}" for field in fields[:5])
     return AnalysisResult(
         risk=risk,
